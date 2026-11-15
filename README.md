@@ -4,7 +4,7 @@
 
 ## Recover project context without an old ChatGPT chat
 
-**[Read the complete VersionVault continuity archive](docs/PROJECT_CONTINUITY_MASTER.md)** — the persistent, public-safe project brief: verified code status, research findings, all 22 study links, five Mermaid architecture/workflow charts, decisions, PR/CI history, security gates, exact commands, and a prompt for the next developer or AI session. Read this **before** relying on long chat history. The archive is a curated technical record, **not a raw private chat export**.
+**[Read the complete VersionVault continuity archive](docs/PROJECT_CONTINUITY_MASTER.md)** · **[Copy the new-chat starter prompt](docs/CONTINUE_IN_NEW_CHAT.md)** — the persistent, public-safe project brief: verified code status, research findings, all 22 study links, five Mermaid architecture/workflow charts, decisions, PR/CI history, security gates, exact commands, and a prompt for the next developer or AI session. Read this **before** relying on long chat history. The archive is a curated technical record, **not a raw private chat export**.
 
 **Branch caveat:** foundation CI and 24-test reliability improvements are proposed in [PR #1](https://github.com/arunabanarjee32-bit/website-old-version/pull/1); they do not exist on main until merged. New sessions must inspect live PR/CI state.
 
