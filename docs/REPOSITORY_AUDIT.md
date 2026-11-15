@@ -43,3 +43,22 @@ Run: PYTHONPATH=services/api pytest -q. Local output was **12 passed in 1.87s**.
 No upstream comparative benchmarks, cloud runtime, production dependency audit or comprehensive security penetration tests have been performed.
 
 See [developer handoff](DEVELOPER_HANDOFF.md), [feature checklist](MASTER_IMPLEMENTATION_CHECKLIST.md), [upstream research](REPOSITORY_RESEARCH_MATRIX.md) and [architecture decision](adr/ADR-001-capture-architecture.md).
+
+
+## Foundation PR audit delta (2026-11-15; not yet merged)
+
+Baseline main commit: `0513510d035db4dca865300e529ccd6375bf5665`; `main` contained 0 open PRs at inspection. Feature branch `codex/versionvault-foundation`, PR [#1](https://github.com/arunabanarjee32-bit/website-old-version/pull/1).
+
+| Code path | Verified behavior and remaining issue | Status after PR CI |
+| --- | --- | --- |
+| `is_permitted_url` and `begin_capture` | Exact numeric HTTP loopback fixture only, no userinfo/fragments, reject other ports/schemes/hosts; no production network isolation | **VERIFIED** for tested admission cases, public use **BLOCKED** |
+| `capture_job` / `EXECUTOR` | One in-process worker; Python HTML fetch rejects redirects and caps bytes, Chromium renders with offline networking. Browser subprocess is not a hardened separate worker | **VERIFIED** fixture; production worker **BLOCKED** |
+| `lifespan` / `connect` | New startup query marks stale `queued` and `running` rows `failed` with `InterruptedByRestart`, preserves `ready`/`failed`. SQLite uses WAL and per-connect `CREATE TABLE IF NOT EXISTS`; versioned migrations not present | **VERIFIED** startup-state regression test; migration **PLANNED** |
+| `store_object` / `object_path` | SHA-256 object key, staging temp and atomic rename, read-time hash verification. No fsync or crash-consistency drill; no encryption/quota | **PARTIALLY IMPLEMENTED** |
+| `import_snapshot` / `read_zip_entry` | Added bounded decompression reads, 10MB upload, 64KB manifest, 20MB per artifact, 25MB aggregate, compression ratio <=200, duplicate/extra entry rejection, digest typing and PNG chunk CRC/framing. ZIPs not extracted into filesystem | **VERIFIED** for new synthetic positive and nine malformed fixtures; fuzzing **PLANNED** |
+| `INDEX` + `home` | Embedded frontend has date, side-by-side comparison, import/export UI; no browser interaction tests | **IMPLEMENTED BUT UNVERIFIED** |
+| `.github/workflows/ci.yml` + `constraints-ci.txt` | GitHub Actions runs Python 3.13, installs Playwright-managed Chromium, checks `pip check`, compileall, selective Ruff and pytest; pins direct application/test packages, uploads installed dependency inventory. No hashed transitive lock, license SBOM or vulnerability scan | CI **VERIFIED**; full lock/SBOM **PARTIALLY IMPLEMENTED** |
+
+**New evidence:** [successful run 43739119692](https://github.com/arunabanarjee32-bit/website-old-version/actions/runs/43739119692), commit `bbd136235a50d9248d34a7e12f1f5397940f0d74`: **24 passed, 1 warning in 5.11 seconds**, selected Ruff checks and pip dependency consistency passed. Earlier [run 43738724575](https://github.com/arunabanarjee32-bit/website-old-version/actions/runs/43738724575) failed 1/12 when snap Chromium took longer than the previous 17.5-second polling window; runner then moved to Playwright-managed Chromium with a 60-second bounded test deadline. This is a CI regression signal and mitigation, not proof of all future runner stability.
+
+**Security limitations:** ZIP validation can reject malformed PNG chunk structures but is not a full image decoding or malware scan. `lifespan` recovery is not a durable job processor or retry queue. Missing CI evidence for public capture, isolation, external assets, WARC search/replay, data migrations, crash durability, authenticated access and actual UI E2E.
