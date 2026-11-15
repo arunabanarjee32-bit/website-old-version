@@ -1,3 +1,5 @@
+> **Implemented local MVP vs target design (2026-11-15):** The diagram below is PROPOSED. Actual committed code is `services/api/versionvault/app.py`: FastAPI API + single in-process executor -> strict numeric `127.0.0.1:8766` Python fetch -> offline Playwright Chromium screenshot -> SQLite metadata + local SHA-256 objects -> static HTML/JS UI and ZIP export/import. In [PR #1](https://github.com/arunabanarjee32-bit/website-old-version/pull/1), startup marks abandoned queued/running jobs failed (`InterruptedByRestart`); it does **not** resume them or implement a durable queue. The ArchiveBox capture adapter, WARC/WACZ pipeline, SolrWayback replay adapter, isolated nonroot worker, network egress restrictions, auth and tenant controls are not implemented. The canonical owned DB and object store must remain the source of truth, never vendor-specific tables or Solr indexes.
+
 # Proposed architecture (design, NOT implemented)
 
 ## Style

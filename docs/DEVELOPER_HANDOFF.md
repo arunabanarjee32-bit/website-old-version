@@ -76,3 +76,28 @@ Read docs/adr/ADR-001-capture-architecture.md and docs/TOP_TWO_REPOSITORIES.md. 
 5. **Browser E2E + job restart robustness:** click through capture/date/compare/export/import and verify retry/restart behavior.
 
 Use docs/MASTER_IMPLEMENTATION_CHECKLIST.md for per-feature acceptance and evidence. Do not change 'planned' to 'done' without real tests.
+
+
+## 11. Foundation PR handoff — 2026-11-15 (subsequent session)
+
+**GitHub state:** `main` baseline `0513510d035db4dca865300e529ccd6375bf5665`. Branch `codex/versionvault-foundation`; [PR #1](https://github.com/arunabanarjee32-bit/website-old-version/pull/1), not merged. Test-evidenced source commit `bbd136235a50d9248d34a7e12f1f5397940f0d74`. Follow-up documentation commits add only descriptions (inspect current PR head before changing files). Do not force-push or merge without approval.
+
+**Changed code/files:** `services/api/versionvault/app.py` (lifespan marks orphaned jobs failed on startup, bounded import read and PNG framing/CRC checks); `tests/test_reliability.py` (12 new cases); `tests/test_app.py` (capture poll deadline 60s); `.github/workflows/ci.yml` (Ubuntu 24.04, Python 3.13, Playwright-managed Chromium, pip check, compileall, selected Ruff, pytest, installed dependency list artifact); `constraints-ci.txt` (direct dependency versions). Existing fixture policy untouched.
+
+**Reproduce:** from repository root with Python 3.13:
+
+```bash
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -e '.[test]' -c constraints-ci.txt
+python -m playwright install chromium
+# In CI, VV_CHROMIUM is set to Playwright's chromium.executable_path.
+# Locally, use VV_CHROMIUM if /usr/bin/chromium is absent or mismatched.
+python -m pip check
+python -m compileall -q services tests
+python -m pytest -q
+```
+
+**Evidence:** [GitHub Actions 43739119692](https://github.com/arunabanarjee32-bit/website-old-version/actions/runs/43739119692) on `bbd1362`: **24 passed, 1 warning in 5.11s**; static checks pass. The one warning is from third-party Starlette/AnyIO deprecation. [Earlier run 43738724575](https://github.com/arunabanarjee32-bit/website-old-version/actions/runs/43738724575) had 1 timeout waiting for a Snap Chromium capture; subsequent CI changed to library-managed browser and bounded wait. No local checkout/test was completed by this session because the execution container could not resolve github.com; do not treat this as local test evidence.
+
+**Next smallest task:** establish **full transitive hash-locked dependency resolution + SBOM/license inventory**, using the now-green CI as a baseline; then SQLite migrations, fsync/fault-injection recovery and UI browser E2E. Keep the exact fixture origin and no live replay. Dependency constraints alone do not constitute a complete reproducible lock. New external service experiments need owner permission and separate isolation evidence.

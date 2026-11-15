@@ -63,7 +63,8 @@ def test_capture_compare_export_import(client, fixture_server):
     response = client.post('/api/captures', json={'url':'http://127.0.0.1:8766/'})
     assert response.status_code == 202
     job_id = response.json()['id']
-    for _ in range(70):
+    deadline = time.monotonic() + 60  # CI browsers can start slowly under load.
+    while time.monotonic() < deadline:
         job = client.get('/api/jobs/'+job_id).json()
         if job['state'] in ('failed', 'ready'):
             break
