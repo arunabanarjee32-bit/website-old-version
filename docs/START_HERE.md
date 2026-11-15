@@ -2,6 +2,10 @@
 
 **Audience:** any developer, designer, researcher or AI coding agent arriving without the original planning conversation.
 
+## First read: persistent project continuity
+
+[**Master continuity archive — PROJECT_CONTINUITY_MASTER.md**](PROJECT_CONTINUITY_MASTER.md) contains the GitHub-source-backed research, implementation/test history, diagrams, upstream study links, safety boundaries and exact next-session prompt. It supersedes the historical *planning-only* statements below where dated evidence shows working code or a new open PR. Always verify the current main branch and PRs rather than assuming plans were merged.
+
 ## The idea in one sentence
 
 Create an independent website preservation system where a user selects a site and a date, saves a reliable record, and can later **find, view, compare, replay (where technically possible) and export** that historical version.
