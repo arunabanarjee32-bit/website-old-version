@@ -13,6 +13,8 @@ import os
 import sqlite3
 import uuid
 import zipfile
+import zlib
+from contextlib import asynccontextmanager
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,7 +30,21 @@ FIXTURE_PORT = int(os.environ.get("VV_FIXTURE_PORT", "8766"))
 DATA_DIR = Path(os.environ.get("VV_DATA_DIR", "./.versionvault-data")).resolve()
 DB_PATH = DATA_DIR / "snapshots.sqlite3"
 EXECUTOR = ThreadPoolExecutor(max_workers=1, thread_name_prefix="vv-capture")
-app = FastAPI(title="VersionVault (local fixture demo)", version="0.1.0")
+
+
+@asynccontextmanager
+async def lifespan(_application: FastAPI):
+    # A process restart cannot resume an in-process ThreadPoolExecutor task.
+    # Fail orphaned jobs explicitly instead of leaving them "running" forever.
+    with connect() as db:
+        db.execute(
+            "UPDATE jobs SET state='failed', error='InterruptedByRestart' "
+            "WHERE state IN ('queued', 'running')"
+        )
+    yield
+
+
+app = FastAPI(title="VersionVault (local fixture demo)", version="0.1.0", lifespan=lifespan)
 
 
 def is_permitted_url(raw: str) -> bool:
@@ -215,36 +231,70 @@ def export_snapshot(snapshot_id: str):
                              "X-Content-Type-Options": "nosniff"})
 
 
+# Bound decompression independently of upload bytes and ZIP metadata.
+MAX_IMPORT_BYTES = 10_000_000
+MAX_MANIFEST_BYTES = 64_000
+MAX_ENTRY_BYTES = 20_000_000
+MAX_TOTAL_UNCOMPRESSED = 25_000_000
+MAX_COMPRESSION_RATIO = 200
+EXPECTED_ENTRIES = {"manifest.json", "page.html", "screenshot.png"}
+
+
+def read_zip_entry(zipf: zipfile.ZipFile, name: str, limit: int) -> bytes:
+    # A bounded stream read protects against dishonest entry size metadata.
+    with zipf.open(name) as source:
+        content = source.read(limit + 1)
+    if len(content) > limit:
+        raise ValueError("Decompressed archive entry too large")
+    return content
+
+
 @app.post("/api/import", status_code=201)
 async def import_snapshot(file: UploadFile = File(...)):
-    data = await file.read(10_000_001)
-    if len(data) > 10_000_000:
+    data = await file.read(MAX_IMPORT_BYTES + 1)
+    if len(data) > MAX_IMPORT_BYTES:
         raise HTTPException(status_code=413, detail="Archive too large")
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as zipf:
-            if sorted(zipf.namelist()) != ["manifest.json", "page.html", "screenshot.png"]:
-                raise ValueError("Unexpected archive contents")
-            if any(x.file_size > 20_000_000 or x.compress_size > 10_000_000 for x in zipf.infolist()):
-                raise ValueError("Archive entry too large")
-            manifest = json.loads(zipf.read("manifest.json"))
-            if manifest.get("format") != "versionvault-local-demo-v1":
+            infos = zipf.infolist()
+            if len(infos) != 3 or {entry.filename for entry in infos} != EXPECTED_ENTRIES:
+                raise ValueError("Unexpected or duplicate archive entries")
+            if sum(entry.file_size for entry in infos) > MAX_TOTAL_UNCOMPRESSED:
+                raise ValueError("Archive expands beyond total size limit")
+            for entry in infos:
+                limit = MAX_MANIFEST_BYTES if entry.filename == "manifest.json" else MAX_ENTRY_BYTES
+                if (
+                    entry.is_dir()
+                    or entry.flag_bits & 1  # encrypted entries unsupported
+                    or entry.file_size > limit
+                    or entry.compress_size > MAX_IMPORT_BYTES
+                    or entry.file_size > MAX_COMPRESSION_RATIO * max(entry.compress_size, 1)
+                ):
+                    raise ValueError("Unsafe archive entry")
+            manifest = json.loads(read_zip_entry(zipf, "manifest.json", MAX_MANIFEST_BYTES))
+            if not isinstance(manifest, dict) or manifest.get("format") != "versionvault-local-demo-v1":
                 raise ValueError("Unrecognized format")
             snap = manifest["snapshot"]
+            if not isinstance(snap, dict):
+                raise ValueError("Invalid snapshot metadata")
             if not isinstance(snap["url"], str) or len(snap["url"]) > 2048:
                 raise ValueError("Bad snapshot URL")
             if not isinstance(snap["title"], str) or len(snap["title"]) > 200:
                 raise ValueError("Bad snapshot title")
             if not isinstance(snap["captured_at"], str) or len(snap["captured_at"]) > 64:
                 raise ValueError("Bad capture date")
-            html = zipf.read("page.html")
-            image = zipf.read("screenshot.png")
-            if len(html) > 20_000_000 or len(image) > 20_000_000:
-                raise ValueError("Payload too large")
+            for digest_name in ("html_sha", "screenshot_sha"):
+                value = snap[digest_name]
+                if not isinstance(value, str) or len(value) != 64 or any(ch not in "0123456789abcdef" for ch in value):
+                    raise ValueError("Bad artifact hash")
+            html = read_zip_entry(zipf, "page.html", MAX_ENTRY_BYTES)
+            image = read_zip_entry(zipf, "screenshot.png", MAX_ENTRY_BYTES)
             if not image.startswith(b"\x89PNG\r\n\x1a\n"):
                 raise ValueError("Not PNG")
             if sha256(html) != snap["html_sha"] or sha256(image) != snap["screenshot_sha"]:
                 raise ValueError("Digest mismatch")
-    except (ValueError, KeyError, AssertionError, zipfile.BadZipFile, json.JSONDecodeError, RuntimeError) as exc:
+    except (ValueError, TypeError, KeyError, AssertionError, zipfile.BadZipFile,
+            json.JSONDecodeError, RuntimeError, EOFError, OSError, zlib.error) as exc:
         raise HTTPException(status_code=400, detail="Invalid or corrupt VersionVault archive") from exc
     ss, hs = store_object(image), store_object(html)
     new_id = uuid.uuid4().hex
