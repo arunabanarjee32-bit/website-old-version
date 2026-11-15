@@ -1,0 +1,173 @@
+VERSIONVAULT — THIRD-PARTY PUBLIC REPOSITORIES TO STUDY
+=======================================================
+Updated: 2026-11-15
+Purpose: comprehensive catalog of public repos discussed during project planning.
+These are RESEARCH CANDIDATES, not checked-in dependencies, bundled source code,
+approved licenses, or claims that each should be integrated.
+
+Licenses shown are GitHub repository metadata checked on 2026-11-15.
+"NOASSERTION" is NOT equivalent to an open/proprietary-compatible license.
+Audit the exact source/version, dependencies and your distribution/hosting pattern.
+AGPL/GPL entries require legal/engineering review before proprietary integration.
+
+ARCHIVING / CAPTURE / REPLAY
+----------------------------
+01. ArchiveBox
+    https://github.com/ArchiveBox/ArchiveBox
+    Role: self-hosted archiving, exports, snapshots; candidate standalone engine.
+    GitHub license metadata: MIT
+    Priority: EVALUATE FIRST.
+
+02. Playwright
+    https://github.com/microsoft/playwright
+    Role: browser rendering, screenshots, automation and e2e tests.
+    GitHub license metadata: Apache-2.0
+    Priority: CORE LIBRARY CANDIDATE.
+
+03. Warcio
+    https://github.com/webrecorder/warcio
+    Role: WARC read/write and archival HTTP records.
+    GitHub license metadata: Apache-2.0
+    Priority: CORE LIBRARY CANDIDATE.
+
+04. ArchiveWeb.page
+    https://github.com/webrecorder/archiveweb.page
+    Role: user-driven interactive browser session capture.
+    GitHub license metadata: AGPL-3.0
+    Priority: STUDY; LICENSE GATE.
+
+05. ReplayWeb.page
+    https://github.com/webrecorder/replayweb.page
+    Role: interactive WARC/WACZ playback.
+    GitHub license metadata: AGPL-3.0
+    Priority: STUDY/REPLAY BENCHMARK; LICENSE GATE.
+
+06. Browsertrix
+    https://github.com/webrecorder/browsertrix
+    Role: managed browser-based web archiving platform.
+    GitHub license metadata: AGPL-3.0
+    Priority: STUDY/ARCHITECTURAL REFERENCE; LICENSE GATE.
+
+07. Browsertrix Crawler
+    https://github.com/webrecorder/browsertrix-crawler
+    Role: browser-driven dynamic capture and WARC/WACZ workflows.
+    GitHub license metadata: AGPL-3.0
+    Priority: ADVANCED CRAWLING RESEARCH; LICENSE GATE.
+
+08. SolrWayback
+    https://github.com/netarchivesuite/solrwayback
+    Role: WARC search, Wayback-style replay and historical navigation.
+    GitHub license metadata: Apache-2.0
+    Priority: EVALUATE BEFORE BUILDING REPLAY/SEARCH.
+
+09. pywb
+    https://github.com/webrecorder/pywb
+    Role: Wayback-style replay, URL rewriting and archive recording.
+    GitHub license metadata: GPL-3.0
+    Priority: STUDY/REPLAY BENCHMARK; LICENSE GATE.
+
+10. Heritrix3
+    https://github.com/internetarchive/heritrix3
+    Role: high-scale web crawling.
+    GitHub license metadata: NOASSERTION (review actual LICENSE files)
+    Priority: LATER; NOT MVP.
+
+11. SingleFile
+    https://github.com/gildas-lormeau/SingleFile
+    Role: save page/assets as single portable HTML.
+    GitHub license metadata: AGPL-3.0
+    Priority: STUDY; LICENSE GATE.
+
+12. OldWeb.today
+    https://github.com/oldweb-today/oldweb-today
+    Role: historical website and old-browser emulation.
+    GitHub license metadata: AGPL-3.0
+    Priority: INSPIRATION; NOT CORE MVP.
+
+MONITORING / JOBS / INDEX / STORAGE / IDENTITY
+----------------------------------------------
+13. changedetection.io
+    https://github.com/dgtlmoon/changedetection.io
+    Role: scheduled site changes, notifications and diffs.
+    GitHub license metadata: Apache-2.0
+    Priority: EVALUATE LATER; DO NOT DUPLICATE ENGINE NEEDLESSLY.
+
+14. Celery
+    https://github.com/celery/celery
+    Role: background processing and job queue.
+    GitHub license metadata: NOASSERTION (check project LICENSE)
+    Priority: IF MULTI-WORKER JOBS ARE REQUIRED.
+
+15. Meilisearch
+    https://github.com/meilisearch/meilisearch
+    Role: search and indexing.
+    GitHub license metadata: NOASSERTION (verify edition/commercial terms)
+    Priority: IF DATABASE SEARCH PROVES INSUFFICIENT.
+
+16. Keycloak
+    https://github.com/keycloak/keycloak
+    Role: OIDC identity, authentication and team/enterprise integration.
+    GitHub license metadata: Apache-2.0
+    Priority: LATER, IF MULTI-USER/ENTERPRISE REQUIRES.
+
+17. SeaweedFS
+    https://github.com/seaweedfs/seaweedfs
+    Role: distributed and S3-compatible object storage.
+    GitHub license metadata: Apache-2.0
+    Priority: LATER AFTER MEASURED SCALE NEED.
+
+AI HISTORY / CHAT ARCHIVING
+---------------------------
+18. LibreChat
+    https://github.com/LibreChat-AI/LibreChat
+    Role: self-hosted AI chat UI with multiple provider connectors.
+    GitHub license metadata: MIT
+    Priority: REFERENCE; DON'T MISTAKE FOR RETIRED MODEL PRESERVATION.
+
+19. Gemini Vault Exporter
+    https://github.com/crytomato529/gemini-vault-exporter
+    Role: study user-authorized chat export.
+    GitHub license metadata: NOASSERTION (verify actual terms)
+    Priority: RESEARCH; DO NOT IMPORT PRIVATE DATA WITHOUT CONSENT.
+
+20. Live Archiver
+    https://github.com/hexnod/live-archiver
+    Role: study saving AI conversations/files.
+    GitHub license metadata: Apache-2.0
+    Priority: RESEARCH.
+
+21. ChatGPT Archive Tools
+    https://github.com/jamesmoore/chatgpt-archive-tools
+    Role: study local browsing of exported ChatGPT history.
+    GitHub license metadata: MIT
+    Priority: RESEARCH.
+
+DISCOVERY / RESEARCH INDEXES
+----------------------------
+22. Awesome Web Archiving
+    https://github.com/iipc/awesome-web-archiving
+    Role: catalog of many further archival tools and standards.
+    GitHub license metadata: CC0-1.0
+    Priority: KEEP AS REFERENCE.
+
+RELATED MARKET PRODUCTS / WEBSITES (NOT GITHUB REPO RECOMMENDATIONS)
+-------------------------------------------------------------------
+Internet Archive Wayback Machine: https://web.archive.org/
+Archive-It: https://archive-it.org/
+Webrecorder platform: https://webrecorder.net/
+ArchiveBox product: https://archivebox.io/
+changedetection.io product: https://changedetection.io/
+ReplayWeb.page docs: https://replayweb.page/docs/user-guide/
+Browsertrix Crawler docs: https://crawler.docs.browsertrix.com/
+OpenAI model deprecation docs: https://developers.openai.com/api/docs/deprecations
+Gemini model deprecation docs: https://ai.google.dev/gemini-api/docs/deprecations
+
+REUSE STRATEGY
+--------------
+- One OWNED monorepo for original VersionVault code.
+- Integrate libraries via package managers and services via well-defined APIs.
+- Do not bulk-fork/merge all the repositories above.
+- First benchmark ArchiveBox vs a minimal Playwright+Warcio pipeline.
+- For replay benchmark SolrWayback; research others with license counsel.
+- Make security, privacy, rights, maintainability and acceptance tests mandatory.
+- Keep a dependency inventory with pinned commits, licenses and provenance.
