@@ -1,0 +1,64 @@
+VERSIONVAULT - PREVIOUSLY RECOMMENDED GITHUB REPOSITORIES
+=======================================================
+Snapshot date: 2026-11-15
+Source: THIRD_PARTY_REPOS_TO_STUDY.txt in this repository
+Count: 22 public repository study candidates
+
+This short link index is a snapshot of the project's existing documented
+recommendations. It is not a verbatim export of past ChatGPT conversations.
+For study rationale, licensing caveats, and evaluation status, see:
+  THIRD_PARTY_REPOS_TO_STUDY.txt
+  docs/REPOSITORY_RESEARCH_MATRIX.md
+  docs/TOP_TWO_REPOSITORIES.md
+  docs/REUSE_FIRST.md
+
+ARCHIVING, CAPTURE AND REPLAY (12)
+----------------------------------
+01. ArchiveBox             https://github.com/ArchiveBox/ArchiveBox
+02. Playwright             https://github.com/microsoft/playwright
+03. Warcio                 https://github.com/webrecorder/warcio
+04. ArchiveWeb.page        https://github.com/webrecorder/archiveweb.page
+05. ReplayWeb.page         https://github.com/webrecorder/replayweb.page
+06. Browsertrix            https://github.com/webrecorder/browsertrix
+07. Browsertrix Crawler    https://github.com/webrecorder/browsertrix-crawler
+08. SolrWayback            https://github.com/netarchivesuite/solrwayback
+09. pywb                   https://github.com/webrecorder/pywb
+10. Heritrix3              https://github.com/internetarchive/heritrix3
+11. SingleFile             https://github.com/gildas-lormeau/SingleFile
+12. OldWeb.today           https://github.com/oldweb-today/oldweb-today
+
+MONITORING, JOBS, SEARCH, AUTH AND STORAGE (5)
+----------------------------------------------
+13. changedetection.io     https://github.com/dgtlmoon/changedetection.io
+14. Celery                 https://github.com/celery/celery
+15. Meilisearch            https://github.com/meilisearch/meilisearch
+16. Keycloak               https://github.com/keycloak/keycloak
+17. SeaweedFS              https://github.com/seaweedfs/seaweedfs
+
+AI AND CONVERSATION HISTORY (4)
+-------------------------------
+18. LibreChat              https://github.com/LibreChat-AI/LibreChat
+19. Gemini Vault Exporter  https://github.com/crytomato529/gemini-vault-exporter
+20. Live Archiver          https://github.com/hexnod/live-archiver
+21. ChatGPT Archive Tools  https://github.com/jamesmoore/chatgpt-archive-tools
+
+RESEARCH INDEXES (1)
+--------------------
+22. Awesome Web Archiving  https://github.com/iipc/awesome-web-archiving
+
+RESEARCH PRIORITIES
+-------------------
+Primary systems to EVALUATE (not already integrated):
+  ArchiveBox - capture/orchestration
+  SolrWayback - archival search/replay
+
+Supporting libraries:
+  Playwright - browser automation and screenshots
+  Warcio - WARC read/write
+
+All other projects are optional study references, not mandatory dependencies.
+Before reuse, check current license, pinned version, transitive dependencies,
+maintenance, security requirements, and deployment obligations. In particular,
+AGPL/GPL projects need careful licensing review; do not bulk-copy code.
+
+This index changes no product code and represents no deployment or integration.
