@@ -45,7 +45,7 @@ def create_archive(case: str = "valid") -> bytes:
     if case == "compression_bomb":
         html = b"x" * 1_000_000
     if case == "invalid_png_crc":
-        image = image[:-9] + bytes([image[-9] ^ 1]) + image[-8:]
+        image = image[:-1] + bytes([image[-1] ^ 1])  # Invalidate IEND chunk CRC.
     snap = {
         "url": "http://127.0.0.1:8766/",
         "title": "Local fixture",
