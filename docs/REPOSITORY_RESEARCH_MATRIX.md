@@ -78,3 +78,10 @@ No upstream service was installed, no upstream performance benchmark was execute
 5. Formal maintainer legal approval for product license, public crawling and replay exposure.
 
 **Source pointers:** official repositories linked in the table; also https://docs.archivebox.io/latest/ArchiveBox-Architecture-Diagrams.html , https://crawler.docs.browsertrix.com/ , https://replayweb.page/docs/user-guide/ and https://github.com/netarchivesuite/solrwayback/blob/master/README.md .
+
+
+## Stable release code recheck (2026-11-15 foundation session)
+
+Exactly **two** primary system repositories remain ArchiveBox and SolrWayback. GitHub release API still returned ArchiveBox `v0.9.77` and SolrWayback `5.5.0`. Actual source at both release tags was rechecked: ArchiveBox `cli/archivebox_add.py`, `api/v1_crawls.py`, `crawls/models.py`, `core/models.py`, `services/runner.py`, `pyproject.toml`, `docker-compose.yml`, MIT `LICENSE`; SolrWayback `parsers/WarcParser.java`, `warc-indexer.sh`, `solr_config/conf/schema.xml`, `pom.xml`, Apache-2.0 `LICENSE.txt`. Notably ArchiveBox's compose example references an unpinned latest image and external Archive.org submission setting, while SolrWayback's indexer defaults to two 2048M Java-heap processes. Treat both as review points, not measured product requirements. See detailed evidence and adapters in [TOP_TWO_REPOSITORIES.md](TOP_TWO_REPOSITORIES.md).
+
+**Actual experiments performed:** GitHub source/release inspection and VersionVault CI fixture tests only. No ArchiveBox binary was installed and no SolrWayback WARC index/replay experiment was run. No new unverified compatibility, capture-success, CPU/RAM, or performance claims are made; 22-repo inventory remains a *screening* record, not approval to combine or distribute any source code.
