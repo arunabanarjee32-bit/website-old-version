@@ -17,24 +17,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install controlled browser
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium
-          command -v chromium
       - name: Install pinned top-level test dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e '.[test]' -c constraints-ci.txt
           python -m pip install ruff==0.14.6
           python -m pip check
+      - name: Install Playwright-managed Chromium
+        run: |
+          python -m playwright install --with-deps chromium
+          CHROMIUM=$(python -c "from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()")
+          echo "VV_CHROMIUM=$CHROMIUM" >> "$GITHUB_ENV"
       - name: Static and syntax checks
         run: |
           python -m compileall -q services tests
           ruff check --select E4,E7,E9,F63,F7,F82 services tests
       - name: Local-fixture-only test suite
-        env:
-          VV_CHROMIUM: /usr/bin/chromium
         run: python -m pytest -q
       - name: Capture resolved dependency inventory
         if: always()
