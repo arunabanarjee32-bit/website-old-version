@@ -69,7 +69,7 @@ ARCHIVING / CAPTURE / REPLAY
 10. Heritrix3
     https://github.com/internetarchive/heritrix3
     Role: high-scale web crawling.
-    GitHub license metadata: NOASSERTION (review actual LICENSE files)
+    GitHub license metadata: NOASSERTION; actual LICENSE declares Apache-2.0 (audit dependencies)
     Priority: LATER; NOT MVP.
 
 11. SingleFile
@@ -95,13 +95,13 @@ MONITORING / JOBS / INDEX / STORAGE / IDENTITY
 14. Celery
     https://github.com/celery/celery
     Role: background processing and job queue.
-    GitHub license metadata: NOASSERTION (check project LICENSE)
+    GitHub license metadata: NOASSERTION; actual LICENSE explicitly BSD-3-Clause
     Priority: IF MULTI-WORKER JOBS ARE REQUIRED.
 
 15. Meilisearch
     https://github.com/meilisearch/meilisearch
     Role: search and indexing.
-    GitHub license metadata: NOASSERTION (verify edition/commercial terms)
+    GitHub license metadata: NOASSERTION; actual LICENSE says MIT AND BUSL-1.1
     Priority: IF DATABASE SEARCH PROVES INSUFFICIENT.
 
 16. Keycloak
@@ -127,7 +127,7 @@ AI HISTORY / CHAT ARCHIVING
 19. Gemini Vault Exporter
     https://github.com/crytomato529/gemini-vault-exporter
     Role: study user-authorized chat export.
-    GitHub license metadata: NOASSERTION (verify actual terms)
+    GitHub license metadata: NOASSERTION; actual LICENSE says ALL RIGHTS RESERVED
     Priority: RESEARCH; DO NOT IMPORT PRIVATE DATA WITHOUT CONSENT.
 
 20. Live Archiver
@@ -216,3 +216,10 @@ Project handbooks:
   docs/ROADMAP.md
   docs/AI_PRESERVATION.md
   AGENTS.md
+
+RESEARCH UPDATE 2026-11-15
+--------------------------
+Complete engineering evidence: docs/REPOSITORY_RESEARCH_MATRIX.md
+Exactly two PRIMARY systems selected for future evaluation: ArchiveBox + SolrWayback.
+Supporting LIBRARIES Playwright and Warcio are not additional primary systems.
+The local fixture MVP does not integrate ArchiveBox or SolrWayback yet.

@@ -1,3 +1,7 @@
+> **Update 2026-11-15:** A locally tested fixture-only MVP exists, but the planned *public website* workflow is not complete and remains security-gated. See [MASTER_IMPLEMENTATION_CHECKLIST.md](MASTER_IMPLEMENTATION_CHECKLIST.md) for per-feature verified status. The milestones below are the earlier planning baseline.
+
+---
+
 # Roadmap with milestones, not promises
 
 ## Milestone 0 — Responsible foundation (CURRENT PRIORITY)

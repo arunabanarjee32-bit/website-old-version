@@ -1,3 +1,7 @@
+> **STATUS UPDATE — 2026-11-15:** The historical audit below describes the original documentation-only tree. A restricted local fixture **FastAPI + SQLite + Playwright** MVP is now committed (services/api/versionvault/app.py). Local test run: **12 passed**; code commit 1f7a591e7d42ec8399da16c6aea05e6f83c5a954, exact-tested source follow-up 1786d0f997a75be07ccc89404b8248608f3c4244. Features: queued job, allowed local HTML fetch, offline Chromium rendering/screenshot, snapshot dates, two-pane comparison UI, checked ZIP import/export. Chromium direct network navigation was blocked in the research environment. No public URL capture, WARC/WACZ, replay, auth, hosted CI, or deployment. Primary repo study selection: ArchiveBox + SolrWayback (NEITHER INTEGRATED). See [audit](REPOSITORY_AUDIT.md), [checklist](MASTER_IMPLEMENTATION_CHECKLIST.md), [handoff](DEVELOPER_HANDOFF.md). This update supersedes earlier statements that no application code exists.
+
+---
+
 # Current status and decisions (as of 2026-11-15)
 
 ## Confirmed in this GitHub repository

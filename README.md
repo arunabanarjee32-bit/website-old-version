@@ -1,6 +1,6 @@
 # VersionVault — Website Old Version Preservation
 
-> **Project status (2026-11-15):** architecture and contributor documentation. This GitHub repository has not yet been established as a working production system. A separate early local-first browser-extension prototype was created during planning; its source must be reviewed/imported and tested before claiming it is part of this repository.
+> **Project status (2026-11-15):** A **locally tested, restricted fixture-only MVP** is now committed in services/api/versionvault. It includes capture jobs, screenshot, metadata, dated history, two-pane comparison and hashed ZIP import/export. **General public crawling, WARC/WACZ replay, production security, accounts and deployment are NOT implemented.** The earlier extension prototype remains separate.
 
 ## Mission
 
@@ -9,6 +9,18 @@ Build an independent, trustworthy, self-hostable and eventually cloud-hosted **w
 **Long-term aspiration:** compete on usability, modern-site fidelity, privacy, transparency and developer experience with the strongest web-archiving products (Internet Archive's Wayback Machine, Archive-It, ArchiveBox, Browsertrix/Webrecorder, and change-monitoring tools). This is an aspiration, **not** a claim that VersionVault currently matches those platforms.
 
 **Hard boundary:** saving ChatGPT/Gemini/Claude interfaces or transcripts **does not preserve** discontinued proprietary AI models, provider servers or private APIs. Never imply otherwise.
+
+## Runnable local demo and new engineering documentation
+
+See [LOCAL_DEMO.md](LOCAL_DEMO.md) for setup and hard restrictions: the only allowed capture target is http://127.0.0.1:8766/ and its paths. On the local research host, PYTHONPATH=services/api pytest -q reported **12 passing tests**; hosted CI and real-world website benchmarks have not run.
+
+- [Repo audit](docs/REPOSITORY_AUDIT.md)
+- [Engineering comparison of all 22 public repos](docs/REPOSITORY_RESEARCH_MATRIX.md)
+- [Exactly two primary systems selected](docs/TOP_TWO_REPOSITORIES.md)
+- [ADR-001 architecture decision](docs/adr/ADR-001-capture-architecture.md)
+- [Master implementation checklist](docs/MASTER_IMPLEMENTATION_CHECKLIST.md)
+- [Competitor feature gaps](docs/COMPETITOR_FEATURE_GAPS.md)
+- [Developer handoff](docs/DEVELOPER_HANDOFF.md)
 
 ## Start here
 
