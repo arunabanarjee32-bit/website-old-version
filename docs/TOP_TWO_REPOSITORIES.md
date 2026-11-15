@@ -61,3 +61,33 @@ Additional: Playwright and Warcio are essential *libraries*, not comprehensive i
 - Obtain maintainer decision on VersionVault license and external service deployment.
 
 **If these gates fail:** keep the same two repositories as *study selections* but do NOT integrate them. Instead continue with a minimal Playwright+Warcio pipeline and reopen the ADR. No fictitious compatibility claims.
+
+
+## Release-tag source verification and integration decision — 2026-11-15
+
+**Primary selections unchanged.** GitHub's latest non-prerelease release API returned **ArchiveBox v0.9.77** (published 2026-10-27) and **SolrWayback 5.5.0** (published 2026-09-15), checked again during foundation work. The prior dev/master references remain historical research pins, not version-locked deployment recipes. License files fetched from the **stable release tags**: ArchiveBox MIT in `LICENSE`; SolrWayback Apache License 2.0 in `LICENSE.txt`. Third-party runtime dependencies, bundled binaries and transitive legal obligations remain unreviewed.
+
+### ArchiveBox 0.9.77 actual source path
+
+- `archivebox/cli/archivebox_add.py`: `_collect_input_urls` calls `validate_url`; `add` accepts depth, URL limit, crawl time/size budgets, selected plugins and background mode, then creates `Crawl` records. This is **not** proof of network-level SSRF isolation.
+- `archivebox/api/v1_crawls.py`: Django-Ninja route `POST /crawls` validates input URLs and creates crawl records. Its schemas/routes are vendor-specific and subject to change; an adapter must map to our stable metadata, not reuse vendor IDs as sole identity.
+- `archivebox/crawls/models.py`, `archivebox/core/models.py` and `archivebox/services/runner.py`: Django lifecycle models and an event/bus/plugin runner coordinate asynchronous crawl/snapshot work. More capable than VersionVault's one-thread executor but materially more operationally complex.
+- `pyproject.toml` at the release tag says version 0.9.77 and imports Django, django-ninja, `abx-dl`, `abx-plugins`, `abxbus` and `abxpkg`. Exact transitive licenses/vulnerabilities still require SBOM assessment.
+- `docker-compose.yml` at tag uses `archivebox/archivebox:latest` by default, has `PUBLIC_ADD_VIEW=False` and `ARCHIVEDOTORG_ENABLED=True` example settings. **Never deploy from unpinned latest or inherit external submission defaults for private captures.**
+- **Status: EXPERIMENT FURTHER**, as optional external capture CLI/service adapter. Never replace working Playwright capture without actual controlled artifact comparison. Current pipeline captures only fixture HTML+PNG and is retained as fallback.
+
+### SolrWayback 5.5.0 actual source path
+
+- `src/main/java/dk/kb/netarchivesuite/solrwayback/parsers/WarcParser.java` handles WARC headers and compressed/uncompressed record lookup, including source offsets; this assumes compatible indexed WARC record locations, not VersionVault ZIPs.
+- `src/bundle/solr_config/conf/schema.xml` defines Solr document fields; SolrWayback's indexed URL, crawl date, source path/offset metadata must map to validated canonical capture records while VersionVault retains original immutable WARC and hashes.
+- `src/bundle/indexing/warc-indexer.sh` invokes a separate UKWA `webarchive-discovery` indexer JAR, with default `THREADS=2` and `INDEXER_MEM=2048M` **per indexer process**. Potential Java heap allocation at default concurrency is therefore significant but actual RAM usage was **not measured**.
+- `pom.xml` tag shows version 5.5.0 and Java servlet/JAX-RS/Solr dependencies. Release notes require Java 11 or 17 for v5+, with Solr 9 and Tomcat 9 in the supplied bundle. The 5.5.0 release notes explicitly describe a fix for certain JavaScript navigation **live-resource leaks**; treat this as a replay-security regression category, not evidence that every leak is impossible.
+- **Status: DEFER the full service in local MVP; EXPERIMENT FURTHER** with an independent, isolated WARC/index/replay experiment. No Solr index, Tomcat service or WARC fixture was executed in foundation PR.
+
+### Proposed replaceable adapter data contract — not implemented
+
+`CaptureResult`: VersionVault capture ID; submitted and normalized URL; UTC timestamp; engine ID/release; artifact descriptors `{kind, sha256, bytes, mime_type, storage_key}`; status/error; extracted resources and known-missing resources; fidelity class `screenshot+HTML` vs validated resource archive; provenance/rights metadata. Importer must verify bytes and hashes before committing snapshot rows. No backend engine is trusted for authorization or canonical ownership.
+
+`SearchReplayAdapter`: `index(verified_warc)`, `lookup(url, timestamp)`, `resource(reference)`. Replays are isolated on an unrelated origin with restricted network and no app cookies, and all misses explicitly report unavailable resources. Solr remains a derived/rebuildable index. Compatibility and API details must be adapted after actual WARC interoperability tests; these are conceptual methods only.
+
+**Interoperability experiment state: BLOCKED (not run).** Need permissioned WARC created and validated with Warcio, safe SolrWayback 5.5.0 bundle and warc-indexer, indexed URL query, timestamp check, asset coverage, missing-resource behavior, live leak isolation, storage/CPU/RAM measurements, transitive license SBOM and rollback. Do not claim `ArchiveBox -> SolrWayback` proven.
