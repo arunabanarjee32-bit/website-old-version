@@ -249,6 +249,41 @@ def read_zip_entry(zipf: zipfile.ZipFile, name: str, limit: int) -> bytes:
     return content
 
 
+def validate_png(data: bytes) -> None:
+    """Check PNG chunk framing/CRC; does not guarantee semantic image decode."""
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError("Not a PNG")
+    offset = 8
+    chunks = 0
+    saw_image_data = False
+    while offset + 12 <= len(data):
+        length = int.from_bytes(data[offset:offset + 4], "big")
+        kind = data[offset + 4:offset + 8]
+        end = offset + 8 + length
+        if end + 4 > len(data):
+            raise ValueError("Truncated PNG chunk")
+        actual_crc = zlib.crc32(kind + data[offset + 8:end])
+        expected_crc = int.from_bytes(data[end:end + 4], "big")
+        if actual_crc != expected_crc:
+            raise ValueError("Corrupt PNG CRC")
+        if chunks == 0:
+            if kind != b"IHDR" or length != 13:
+                raise ValueError("Missing PNG header")
+            width = int.from_bytes(data[offset + 8:offset + 12], "big")
+            height = int.from_bytes(data[offset + 12:offset + 16], "big")
+            if not 1 <= width <= 16_384 or not 1 <= height <= 16_384:
+                raise ValueError("Invalid PNG dimensions")
+        if kind == b"IDAT":
+            saw_image_data = True
+        if kind == b"IEND":
+            if length != 0 or not saw_image_data or end + 4 != len(data):
+                raise ValueError("Invalid PNG ending")
+            return
+        offset = end + 4
+        chunks += 1
+    raise ValueError("Incomplete PNG")
+
+
 @app.post("/api/import", status_code=201)
 async def import_snapshot(file: UploadFile = File(...)):
     data = await file.read(MAX_IMPORT_BYTES + 1)
@@ -289,8 +324,7 @@ async def import_snapshot(file: UploadFile = File(...)):
                     raise ValueError("Bad artifact hash")
             html = read_zip_entry(zipf, "page.html", MAX_ENTRY_BYTES)
             image = read_zip_entry(zipf, "screenshot.png", MAX_ENTRY_BYTES)
-            if not image.startswith(b"\x89PNG\r\n\x1a\n"):
-                raise ValueError("Not PNG")
+            validate_png(image)
             if sha256(html) != snap["html_sha"] or sha256(image) != snap["screenshot_sha"]:
                 raise ValueError("Digest mismatch")
     except (ValueError, TypeError, KeyError, AssertionError, zipfile.BadZipFile,
