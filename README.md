@@ -2,6 +2,12 @@
 
 > **Project status (2026-11-15):** A **locally tested, restricted fixture-only MVP** is now committed in services/api/versionvault. It includes capture jobs, screenshot, metadata, dated history, two-pane comparison and hashed ZIP import/export. **General public crawling, WARC/WACZ replay, production security, accounts and deployment are NOT implemented.** The earlier extension prototype remains separate.
 
+## Recover project context without an old ChatGPT chat
+
+**[Read the complete VersionVault continuity archive](docs/PROJECT_CONTINUITY_MASTER.md)** — the persistent, public-safe project brief: verified code status, research findings, all 22 study links, five Mermaid architecture/workflow charts, decisions, PR/CI history, security gates, exact commands, and a prompt for the next developer or AI session. Read this **before** relying on long chat history. The archive is a curated technical record, **not a raw private chat export**.
+
+**Branch caveat:** foundation CI and 24-test reliability improvements are proposed in [PR #1](https://github.com/arunabanarjee32-bit/website-old-version/pull/1); they do not exist on main until merged. New sessions must inspect live PR/CI state.
+
 ## Mission
 
 Build an independent, trustworthy, self-hostable and eventually cloud-hosted **website time machine** that lets people capture, preserve, search, replay where possible, compare, and export earlier versions of websites. Treat the preservation of AI product interfaces and users' authorized conversation exports as a special use case.
