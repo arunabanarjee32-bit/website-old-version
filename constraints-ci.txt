@@ -1,0 +1,9 @@
+# Versions reproduced in the previous local MVP environment (Python 3.13).
+# This is a DIRECT dependency constraints file, NOT a complete transitive lock.
+# CI uploads its resolved pip freeze for auditing; generate hashed lock/SBOM next.
+fastapi==0.128.2
+uvicorn==0.48.0
+playwright==1.57.0
+python-multipart==0.0.29
+pytest==9.0.2
+httpx==0.28.1
