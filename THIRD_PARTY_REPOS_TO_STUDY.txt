@@ -171,3 +171,48 @@ REUSE STRATEGY
 - For replay benchmark SolrWayback; research others with license counsel.
 - Make security, privacy, rights, maintainability and acceptance tests mandatory.
 - Keep a dependency inventory with pinned commits, licenses and provenance.
+
+CODEX / CONTRIBUTOR QUICK-START — REPOSITORY REUSE PRIORITIES
+-------------------------------------------------------------
+The catalog above is COMPLETE for all public repositories previously
+recommended in the VersionVault planning conversations (22 entries).
+
+DO NOT combine all 22 codebases. The list is an evaluation inventory.
+
+First implementation / benchmark candidates:
+  - ArchiveBox: test self-hosted capture as an external engine.
+  - Playwright: server-side browser automation, screenshots and e2e tests.
+  - Warcio: WARC record creation and reading.
+  - SolrWayback: assess search/replay before writing custom equivalents.
+
+Use only when product need is demonstrated:
+  - changedetection.io: monitoring and alerts.
+  - Celery: multi-worker queue.
+  - Keycloak: advanced authentication / organization features.
+  - Meilisearch: dedicated search service.
+  - SeaweedFS: distributed storage.
+  - Heritrix3: large-scale crawler.
+
+Research and audit carefully before integration:
+  - Browsertrix, Browsertrix Crawler, ArchiveWeb.page, ReplayWeb.page,
+    SingleFile, pywb, OldWeb.today (copyleft considerations).
+  - LibreChat and chat-export utilities (AI conversation import use only).
+
+Mandatory developer checklist:
+  1. Verify repository status, precise license at pinned commit, and
+     transitive dependencies before adoption.
+  2. Compare features to existing code before requesting new Codex work.
+  3. Use dependencies/APIs/containers rather than wholesale code merges.
+  4. Define measurable quality, isolation, privacy and export tests.
+  5. Record an ADR for significant technology choices.
+  6. Never claim saved frontend code can restore retired proprietary AI.
+  7. Do not ship public URL capture without SSRF/egress protections.
+
+Project handbooks:
+  README.md
+  docs/START_HERE.md
+  docs/REUSE_FIRST.md
+  docs/ARCHITECTURE.md
+  docs/ROADMAP.md
+  docs/AI_PRESERVATION.md
+  AGENTS.md
