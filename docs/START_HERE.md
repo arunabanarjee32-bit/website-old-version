@@ -4,7 +4,7 @@
 
 ## First read: persistent project continuity
 
-[**Master continuity archive — PROJECT_CONTINUITY_MASTER.md**](PROJECT_CONTINUITY_MASTER.md) contains the GitHub-source-backed research, implementation/test history, diagrams, upstream study links, safety boundaries and exact next-session prompt. It supersedes the historical *planning-only* statements below where dated evidence shows working code or a new open PR. Always verify the current main branch and PRs rather than assuming plans were merged.
+[**Master continuity archive — PROJECT_CONTINUITY_MASTER.md**](PROJECT_CONTINUITY_MASTER.md) and [**recovered earlier project chat context**](PROJECT_CHAT_CONTEXT_RECOVERED.md) should both be read. The master archive contains the GitHub-source-backed research, implementation/test history, diagrams, upstream study links, safety boundaries and exact next-session prompt. It supersedes the historical *planning-only* statements below where dated evidence shows working code or a new open PR. Always verify the current main branch and PRs rather than assuming plans were merged.
 
 ## The idea in one sentence
 
