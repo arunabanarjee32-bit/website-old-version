@@ -538,6 +538,10 @@ This section intentionally preserves **decision-bearing project context** rather
 >
 > Never claim implementation or benchmark success without code and test evidence. Make the next session resumable.
 
+## Accessible older project-chat excerpts
+
+For conversation-specific records from other VersionVault chats, read **[PROJECT_CHAT_CONTEXT_RECOVERED.md](PROJECT_CHAT_CONTEXT_RECOVERED.md)**. It preserves the visible portions of three earlier project conversations, a timeline of current project requests, technical conclusions, a context-to-documentation diagram, and a clear explanation of missing full transcripts. It is **not** a complete account-wide chat export. Keep its source/coverage warnings when updating it.
+
 ## 18. Rules for maintaining this document
 
 1. At the end of **every meaningful coding/research session**, append a dated checkpoint **with exact branch, commit, PR link, changed paths, commands, test counts, CI run URLs, failures, risks, next smallest task**.
