@@ -2,6 +2,10 @@
 
 You are working on **VersionVault**, an independent long-term web preservation platform. Read README.md and docs/START_HERE.md before touching implementation. There is no confirmed production system in this repository as of the initial documentation import.
 
+## Required chat-independent continuity
+
+Before starting substantive work, read [docs/PROJECT_CONTINUITY_MASTER.md](docs/PROJECT_CONTINUITY_MASTER.md) and [docs/PROJECT_CHAT_CONTEXT_RECOVERED.md](docs/PROJECT_CHAT_CONTEXT_RECOVERED.md), which records the accessible earlier project-chat excerpts and explicit coverage limitations. It retains public-safe technical research, 22 upstream links, exactly two primary systems, architecture charts, branch/PR status, CI evidence, security gates, and a ready-to-reuse next-session prompt. Do not assume previous ChatGPT conversations can be loaded or that a green unmerged PR exists on main. After each session, add a checkpoint with commit SHA, tested results, links, known failures and next task. Never publish raw private conversation data in this public repository.
+
 ## Non-negotiable task workflow
 
 1. Inspect the actual working tree, tests, environment and current state. Never assume features exist because they are on the roadmap.
