@@ -5,6 +5,7 @@
 ## Where the knowledge lives
 
 - [**Master continuity archive (complete research, links, five diagrams, decisions, tests, tasks)**](PROJECT_CONTINUITY_MASTER.md)
+- [Recovered earlier project chat excerpts and coverage limitations](PROJECT_CHAT_CONTEXT_RECOVERED.md)
 - [Repository README](../README.md) and [agent instructions](../AGENTS.md)
 - [Current status](CURRENT_STATUS.md) and [actual code audit](REPOSITORY_AUDIT.md)
 - [Master implementation checklist](MASTER_IMPLEMENTATION_CHECKLIST.md)
